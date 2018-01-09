@@ -1,0 +1,41 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	padding:0;
+	margin:0;
+}
+body {
+	background-color:rgba(124, 209, 237, 1);
+}
+nav{
+	position:static;
+	top:0;
+	left:0;
+	width:100%;
+	min-height:50px;
+	background:rgba(20,115,146,.1);
+}
+
+nav ul li {
+	list-style-type:none;
+	float:right;
+	margin: 15px 15px 0 0;
+	font-family: 'Roboto', sans-serif;
+}
+
+nav ul li a {
+	color:white;
+	text-decoration:none;
+}
+
+#land {
+	position:absolute;
+	bottom:40px;
+	left:20px;
+	animation: levitate 4s infinite;
+}
+@keyframes levitate {
+	0% {bottom:40px;}
+	50% {bottom:50px;}
+	100% {bottom:40px;}
+}
