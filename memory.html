@@ -1,9 +1,11 @@
+
+
 <style>
 .container {
 	margin:10px;
 	display:inline-block;
-	width:50px;
-	height:50px;
+	width:100px;
+	height:100px;
 	position:relative;
 	perspective:800px;
 }
@@ -12,7 +14,7 @@
 	height:100%;
 	position: absolute;
     transform-style: preserve-3d;
-    transition: transform 1s;
+    transition: opacity 2s, transform 1s;
 }
 .front {
 	z-index:1;
@@ -21,7 +23,7 @@
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-	background-color:red;
+	background-color:rgba(124, 209, 237, 1);
 }
 .back {
     transform: rotateY( 180deg );
@@ -30,101 +32,74 @@
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-	background-color:blue;
+	background-color:white;
 }
 #game-container {
 	z-index:0;
 	position:relative;
+	padding-top:50px;
+  	height:80%;
+	width:100%;
+	left:42%;
+}
+button {
+	border:none;
+	height:20px; 
+    width:100px; 
+	opacity:.8;
+    position:relative;
+	background-color:white;
+	font-family:'Roboto',sans-serif;
+	font-size:1.1em;
+}
+#land-container{
+opacity:.1;
+}
+#moves, #score, #victory {
+	margin:10px;
+	font-family: 'Roboto', sans-serif;
+	font-size:1.1em;
+	color:white;
+}
+h1 {text-align:center;
+	display:flex;
+	justify-content:center;
+	margin-top:7%;
+	font-size:3em;
+	font-family:'Roboto',sans-serif;
+	color:white;
+	
 }
 </style>
 
-<body>
-<h1>MEMORY</h1>
-<div id="game-container"></div>
-<button name="8" value="8" type="button">8</button>
-<button name="16" value="16"  type="button">16</button>
-<button name="32" value="32"  type="button">32</button>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script>
-$(document).ready(function(){
-	function shuffle(array) {
-	  var currentIndex = array.length, temporaryValue, randomIndex;
-	
-	  // While there remain elements to shuffle...
-	  while (0 !== currentIndex) {
-	
-		// Pick a remaining element...
-		randomIndex = Math.floor(Math.random() * currentIndex);
-		currentIndex -= 1;
-	
-		// And swap it with the current element.
-		temporaryValue = array[currentIndex];
-		array[currentIndex] = array[randomIndex];
-		array[randomIndex] = temporaryValue;
-	  }
-	
-	  return array;
-	}
-	$('button').click(function(){
-		var gameMode = $(this).val();
-		var card = 0;
-		var pictureId = 0;
-		var idNums = [];
-		var pictures = [];
-		
-		
-		while (card < gameMode){
-			if (idNums.length < (parseInt(gameMode))){
-				idNums.push(pictureId);
-				idNums.push(pictureId);
-				shuffle(idNums);
-				pictureId++;
-			}
-			else{
-				var imgUrl = '<img src="../img/img-' + idNums[card] + '.png" width="100%" height="auto">'
-				$('#game-container').append('<div class="container"><div class="card" id="img-' + idNums[card] + '"><div class="front"></div><div class="back">' + imgUrl + '</div></div></div>');
-				card++;
-			}
-		}
-		$('button').css('display','none');
-	});
-	
-	var matchArray = [];
-	
-	$(document).on('click', '.front', function(e){
-		if($('.active').length < 2){
-			$(this).parent('div').delay(1000).css('transform','rotateY(180deg)');
-			$(this).addClass('active');
-			matchArray.push($(this));
-			console.log(matchArray);
-			if ($('.active').length == 2) {
-				var matcher = setTimeout(matchCheck(matchArray),1000);
-			}
-		}
-	});
-	
-	function matched() {
-	}
-	function matchCheck(matchArray) {
-		var card1 = matchArray[0].siblings('.back').html();
-		var card2 = matchArray[1].siblings('.back').html();
-		if (card1 == card2) {
-			console.log('match');
-			
-		} else {
-			console.log('no match');
-			$(matchArray[0]).parent('div').delay(1000).css('transform','rotateY(360deg)');
-			$(matchArray[1]).parent('div').delay(1000).css('transform','rotateY(360deg)');
-		}
-		$(matchArray[0]).delay(1000).removeClass('active');
-		$(matchArray[1]).delay(1000).removeClass('active');
-		matchArray.pop();
-		matchArray.pop();
-		return matchArray;
-	}
-	
-});
-		
-</script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="../css/style.css" type="text/css" rel="stylesheet" />
 
+<nav>
+	<a draggable="false" href="#!/index.html"><img id="logo" draggable="false" src="../img/logo.svg" height="40px"></a>
+    <ul>
+        <li><a href="#!/about.html">about</a></li>
+        <li><a href="#!/projects.html">projects</a></li>
+        <li><a href="#!/contact.html">contact</a></li>
+        <li><a href="#!/resume.html">resume</a></li>
+    </ul>
+</nav>
+<body>
+<div id="project-overlay">
+<div id="land-container">
+	<img id="land" draggable="false" src="../img/land.svg" height="50%" width="auto" />
+</div>
+<h1>Memory</h1>
+<div id="game-container">
+    <button name="8" value="8" type="button">8</button>
+    <button name="16" value="16"  type="button">16</button>
+    <button name="32" value="32"  type="button">32</button>
+    
+</div>
+	
+</div>
 </body>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="../js/memory.js"></script>

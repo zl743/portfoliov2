@@ -1,120 +1,103 @@
-var cardSelect = document.querySelectorAll('.card');
-var score = document.querySelector('#score');
-var moves = document.querySelector('#moves');
-var number = 0;
-var count = 0;
-var moveCount = 0;
-
-function (e) {
-	selectedCard = e.target;
-	console.log(e);
-	console.log(e.target);
-	if (number == 0 && selectedCard.className != 'done' && selectedCard.className == "front"){
-		moveCount += 1;
-		moves.innerHTML = '<h3>Moves-' + moveCount + '</h3>';
-		selectedCard.parentNode.style.transform = 'rotateY(180deg)'
-		selectedCard.className = 'selected';
-		number += 1;
-		return number;}
-	else if (number == 1 && selectedCard.className != 'done' && selectedCard.className == "front"){
-		moveCount += 1;
-		moves.innerHTML = '<h3>Moves-' + moveCount + '</h3>';
-		selectedCard.parentNode.style.transform = 'rotateY(180deg)'
-		selectedCard.className = 'selected2';
-		var card1 = document.querySelector('.selected');
-		var card2 = document.querySelector('.selected2');
-		console.log(card1.nextSibling.nextSibling);
-		var timing = setTimeout (function() {
-			if (card1.nextSibling.nextSibling.innerHTML == card2.nextSibling.nextSibling.innerHTML){
-				card1.parentNode.style.opacity = '0';
-				card1.className = 'done';
-				card2.className = 'done';
-				card2.parentNode.style.opacity = '0';
-				disappearSound.play();
-				
-				var count = document.querySelectorAll('.done').length;
-				console.log(count)
-				moves.innerHTML = '<h3>Moves-' + moveCount + '</h3>';
-				score.innerHTML = '<h3>Score-' + count + '</h3>';
-				var winTime = setTimeout ( function() {
-					if (count == 12){
-					e.preventDefault();
-					var winMessage = document.querySelector('#win').href;
-					var xhr = new XMLHttpRequest();
-	 				xhr.onreadystatechange = function() {
-		 				if (xhr.readyState == 4 && xhr.status ==200) {
-			  				document.querySelector('#gameboard').innerHTML = xhr.responseText;
-		  					}
-	 					};
-					xhr.open("GET", winMessage, true);
-		  			xhr.send();
-					winSound.play();
-				}},500);
-			} else{
-				card1.className = 'front';
-				card1.parentNode.style.transform = 'rotateY(360deg)'
-				card2.className = 'front';
-				card2.parentNode.style.transform = 'rotateY(360deg)'
-			}},500);
-		number -=1;
-		return number;
-	}
+$(document).ready(function(){
+	function shuffle(array) {
+	  var currentIndex = array.length, temporaryValue, randomIndex;
 	
-};
-
-
-cardSelect[0].addEventListener('click', );
-cardSelect[1].addEventListener('click', );
-cardSelect[2].addEventListener('click', );
-cardSelect[3].addEventListener('click', );
-cardSelect[4].addEventListener('click', );
-cardSelect[5].addEventListener('click', );
-cardSelect[6].addEventListener('click', );
-cardSelect[7].addEventListener('click', );
-cardSelect[8].addEventListener('click', );
-cardSelect[9].addEventListener('click', );
-cardSelect[10].addEventListener('click', );
-cardSelect[11].addEventListener('click', );
-
-var array = [];
-var array2 = [];
-var images = [];
-var rng;
-
-while(array.length<6){
-	 rng = Math.round(5*Math.random());
-	 if (array.indexOf(rng) == -1){
-		 var image = '<img src="img-' + rng + '.png" width="100px" height="100px">'
-		 images.push(image);
-		 array.push(rng);
-	 }
-	 console.log(array);
-}
-while(array2.length<6){
-	 rng = Math.round(5*Math.random());
-	 if (array2.indexOf(rng) == -1){
-		 var image = '<img src="img-' + rng + '.png" width="100px" height="100px">'
-		 images.push(image);
-		 array2.push(rng);
-	 }
-	 if (array2.length==6){
-		 
-	 }
-	 console.log(array2);
-}
-
-function shuffleArray(images) {
-    for (var i = images.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = images[i];
-        images[i] = images[j];
-
-        images[j] = temp;
-    }
-	for (var i = 0; i<12; i++){
-		cardSelect[i].childNodes[3].innerHTML = images[i];
+	  // While there remain elements to shuffle...
+	  while (0 !== currentIndex) {
+	
+		// Pick a remaining element...
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+	
+		// And swap it with the current element.
+		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	  }
+	
+	  return array;
 	}
-     return images;
-}
-shuffleArray(images);
-console.log(images);
+	$('button').click(function(){
+		var gameMode = $(this).val();
+		var card = 0;
+		var pictureId = 0;
+		var idNums = [];
+		var pictures = [];
+		
+		
+		while (card < gameMode){
+			if (idNums.length < (parseInt(gameMode))){
+				idNums.push(pictureId);
+				idNums.push(pictureId);
+				shuffle(idNums);
+				pictureId++;
+			}
+			else{
+				var imgUrl = '<img src="../img/img-' + idNums[card] + '.png" width="100%" height="auto">'
+				$('#game-container').append('<div class="container"><div class="card" id="img-' + idNums[card] + '"><div class="front"></div><div class="back">' + imgUrl + '</div></div></div>');
+				card++;
+			}
+		}
+		$('button').css('display','none');
+		if(gameMode == 8){
+			$('#game-container').css({'width':'15%', 'left':'43.75%'});
+		} else if (gameMode == 16) {
+			$('#game-container').css({'width':'25%', 'left':'37.5%'} );
+		} else {
+			$('#game-container').css({'width':'50%', 'left':'25%'});
+		}
+		$('#game-container').append('<div id="score">score: 0</div><div id="moves">moves: 0</div>');
+	});
+	
+	var matchArray = [];
+	var score = 0;
+	var moves = 0;
+	
+	$(document).on('click', '.front', function(e){
+
+		//console.log(e);
+		if(matchArray.length >= 2){
+			e.preventDefault();
+		} else{
+			if($('.active').length < 2){
+				$(this).parent('.card').css('transform','rotateY(180deg)');
+				e.target.className='front active';
+				matchArray.push(e.target.parentNode);
+				moves++;
+				$('#moves').html('moves: ' + moves);
+				
+				if ($('.active').length == 2) {
+					matchCheck(e, matchArray);
+					
+				}
+			}
+		}
+	});
+	
+	function matchCheck(e, matchArray) {
+		if (matchArray[0].id == matchArray[1].id){
+			var disappear = setTimeout(function(){
+				$(matchArray[0]).css('opacity','0');
+				$(matchArray[1]).css('opacity','0');
+				matchArray.pop();
+				matchArray.pop();
+			},800)
+			score += 2;
+			$('#score').html('score: ' + score);
+			if($('.card').length == score) {
+				$('#game-container').empty();
+				$('#game-container').append('<div id="victory">you win! lol</div>')
+			}
+		}else{
+			var resetCards = setTimeout(function(){
+				$(matchArray[0]).css('transform','rotateY(0deg)');
+				$(matchArray[1]).css('transform','rotateY(0deg)');
+				matchArray.pop();
+				matchArray.pop();
+			},800);
+		}
+		$('.front').removeClass('active');
+	};
+	
+	
+});
