@@ -39,12 +39,13 @@ $(document).ready(function(){
 			}
 		}
 		$('button').css('display','none');
+		$('#game-container').css('display','inline-block');
 		if(gameMode == 8){
-			$('#game-container').css({'width':'15%', 'left':'43.75%'});
+			$('#game-container').css({'width':'240px', 'left':'43.75%'});
 		} else if (gameMode == 16) {
-			$('#game-container').css({'width':'25%', 'left':'37.5%'} );
+			$('#game-container').css({'width':'480px', 'left':'37.5%'} );
 		} else {
-			$('#game-container').css({'width':'50%', 'left':'25%'});
+			$('#game-container').css({'width':'960px', 'left':'25%'});
 		}
 		$('#game-container').append('<div id="score">score: 0</div><div id="moves">moves: 0</div>');
 	});
@@ -84,11 +85,15 @@ $(document).ready(function(){
 			},800)
 			score += 2;
 			$('#score').html('score: ' + score);
-			if($('.card').length == score) {
-				$('#game-container').empty();
-				$('#game-container').append('<div id="victory">you win! lol</div>')
+			
+			function winGame(){
+				if($('.card').length == score) {
+					$('#game-container').empty();
+					$('#game-container').append('<div id="victory" style="opacity:1">u a winna! lol<br><button name="reload" onclick="location.reload()">Play Again</button></div>')
+				}
 			}
-		}else{
+			var victory = setTimeout(winGame,3000);
+			}else{
 			var resetCards = setTimeout(function(){
 				$(matchArray[0]).css('transform','rotateY(0deg)');
 				$(matchArray[1]).css('transform','rotateY(0deg)');
