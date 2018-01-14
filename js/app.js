@@ -5,11 +5,14 @@ app.config(['$routeProvider', function($routeProvider){
 			.when('/about.html', {
 				templateUrl: '/about.html'
 			})
-			.when('/work.html', {
-				templateUrl: '/work.html'
+			.when('/projects.html', {
+				templateUrl: '/projects/projects.html'
 			})
 			.when('/contact.html', {
 				templateUrl: '/contact.html'
+			})
+			.when('/resume.html', {
+				templateUrl: '/resume.html'
 			})
 			.otherwise({
 				redirectTo: '/index.html'
